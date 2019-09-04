@@ -9,13 +9,16 @@ import android.os.CountDownTimer;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
     private Switch uslessSwitch;
     private Button selfDistruct;
+    private Button lookBusy;
     private ConstraintLayout constraintLayout;
+    private ProgressBar busyBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,23 +83,52 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        lookBusy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                busyBar.setVisibility(View.VISIBLE);
+                selfDistruct.setVisibility(View.INVISIBLE);
+                uslessSwitch.setVisibility(View.INVISIBLE);
+                lookBusy.setVisibility(View.INVISIBLE);
+                new CountDownTimer(10000, 100) {
+                    int value = 0;
+
+                    @Override
+                    public void onTick(long l) {
+                        busyBar.setProgress(value);
+                        value++;
+                    }
+
+                    @Override
+                    public void onFinish() {
+                        selfDistruct.setVisibility(View.VISIBLE);
+                        uslessSwitch.setVisibility(View.VISIBLE);
+                        lookBusy.setVisibility(View.VISIBLE);
+                        busyBar.setVisibility(View.INVISIBLE);
+                    }
+                }.start();
+
+
+            }
+        });
+
     }
 
     private void wireWidgets() {
         uslessSwitch = findViewById(R.id.switch_main);
         selfDistruct = findViewById(R.id.button_main_selfdistruct);
         constraintLayout = findViewById(R.id.constraint_layout_main);
+        lookBusy = findViewById(R.id.button_main_busy);
+        busyBar = findViewById(R.id.progressbar_main_busy);
 
 
     }
 
-    private void changeBackgroundColor()
-
-    {
+    private void changeBackgroundColor() {
         int r = 255;
         int g = 0;
         int b = 0;
-        constraintLayout.setBackgroundColor(Color.rgb(r,b,g));
+        constraintLayout.setBackgroundColor(Color.rgb(r, b, g));
     }
 }
 
